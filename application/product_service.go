@@ -1,11 +1,15 @@
 package application
 
 type ProductService struct {
-	Persistance ProductPersistenceInterface
+	Persistence ProductPersistenceInterface
+}
+
+func NewProductService(persistence ProductPersistenceInterface) *ProductService {
+	return &ProductService{Persistence: persistence}
 }
 
 func (s *ProductService) Get(id string) (ProductInterface, error) {
-	product, err := s.Persistance.Get(id)
+	product, err := s.Persistence.Get(id)
 	if err != nil {
 		return nil, err
 	}
@@ -20,28 +24,33 @@ func (s *ProductService) Create(name string, price float64) (ProductInterface, e
 	if err != nil {
 		return &Product{}, err
 	}
-	product, err = s.Persistance.Save(product)
+	result, err := s.Persistence.Save(product)
 	if err != nil {
 		return &Product{}, err
 	}
-	return product, nil
+	return result, nil
 }
 
 func (s *ProductService) Enable(product ProductInterface) (ProductInterface, error) {
-	product.Status = ENABLED
-	product, err := s.Persistance.Save(product)
+	err := product.Enable()
 	if err != nil {
 		return &Product{}, err
 	}
-	return product, nil
+	result, err := s.Persistence.Save(product)
+	if err != nil {
+		return &Product{}, err
+	}
+	return result, nil
 }
 
 func (s *ProductService) Disable(product ProductInterface) (ProductInterface, error) {
-
-	product.Status = DISABLED
-	product, err := s.Persistance.Save(product)
+	err := product.Disable()
 	if err != nil {
 		return &Product{}, err
 	}
-	return product, nil
+	result, err := s.Persistence.Save(product)
+	if err != nil {
+		return &Product{}, err
+	}
+	return result, nil
 }
