@@ -32,7 +32,7 @@ func (w Webserver) Serve() {
 	http.Handle("/", router)
 
 	server := &http.Server{
-		Addr:              ":8080",
+		Addr:              ":9000",
 		Handler:           http.DefaultServeMux,
 		ErrorLog:          log.New(os.Stderr, "log: ", log.Lshortfile),
 		ReadHeaderTimeout: 10 * time.Second,
