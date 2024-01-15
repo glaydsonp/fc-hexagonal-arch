@@ -2,11 +2,12 @@ package application
 
 import (
 	"errors"
+
 	"github.com/asaskevich/govalidator"
 	uuid "github.com/satori/go.uuid"
 )
 
-func init () {
+func init() {
 	govalidator.SetFieldsRequiredByDefault(true)
 }
 
@@ -46,15 +47,15 @@ const (
 )
 
 type Product struct {
-	ID string `valid:"uuidv4"`
-	Name string `valid:"required"`
-	Status string `valid:"required"`
-	Price float64 `valid:"float,optional"`
+	ID     string  `valid:"uuidv4"`
+	Name   string  `valid:"required"`
+	Status string  `valid:"required"`
+	Price  float64 `valid:"float,optional"`
 }
 
 func NewProduct() *Product {
 	product := Product{
-		ID: 	uuid.NewV4().String(),
+		ID:     uuid.NewV4().String(),
 		Status: DISABLED,
 	}
 	return &product
@@ -87,16 +88,16 @@ func (p *Product) Enable() error {
 		p.Status = ENABLED
 		return nil
 	}
-	
+
 	return errors.New("The price must be greater than zero to enable the product")
 }
 
 func (p *Product) Disable() error {
-	if p.Price <= 0{
-		p.Status = ENABLED
+	if p.Price <= 0 {
+		p.Status = DISABLED
 		return nil
 	}
-	
+
 	return errors.New("The price must be less than or equal to zero in order to disable the product")
 }
 
